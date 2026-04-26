@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASNA Needle & Co. — Handcrafted Textile Art</title>
+<meta name="description" content="ASNA Needle & Co. is a design-led studio creating handmade textile pieces — hand-embroidered football-inspired garments, crochet, calligraphy, and textile painting. A digital exhibition store.">
+<meta property="og:title" content="ASNA Needle & Co. — Handcrafted Textile Art">
+<meta property="og:description" content="Where thread becomes testament. Hand-embroidered football-inspired garments and experimental textile works, made slowly and with intention.">
+<meta property="og:image" content="https://res.cloudinary.com/dg4vourvl/image/upload/v1777148862/Asna_20260425_204824_0000_iah4pc.png">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#ece6d9">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#ece6d9;--primary:#491f11;--secondary:#726054;
+  --accent1:#b38c74;--accent2:#946a53;
+  --surface1:#e4cdb9;--surface2:#caa892;--neutral:#8b7363;
+  --serif:'Cormorant Garamond',serif;--sans:'Inter',sans-serif;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--bg);color:var(--primary);font-family:var(--sans);overflow-x:hidden;cursor:none}
+
+/* CURSOR + THREAD TRAIL */
+.cursor,.cursor-ring{pointer-events:none;position:fixed;border-radius:50%;z-index:9999;transform:translate(-50%,-50%)}
+.cursor{width:8px;height:8px;background:var(--primary);transition:transform .15s,opacity .2s}
+.cursor-ring{width:36px;height:36px;border:1px solid var(--accent1);z-index:9998;transition:transform .35s cubic-bezier(.25,.46,.45,.94),opacity .2s;opacity:.6}
+.cursor.hover{transform:translate(-50%,-50%) scale(3);opacity:.4}
+.cursor-ring.hover{transform:translate(-50%,-50%) scale(1.6);opacity:.3}
+.thread-trail{position:fixed;z-index:9997;pointer-events:none;width:4px;height:4px;background:var(--accent1);border-radius:50%;opacity:0.6;transition:all 0.08s ease-out}
+@media(hover:none){.cursor,.cursor-ring,.thread-trail{display:none}body{cursor:auto}}
+
+/* ENTRY */
+#entry{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;transition:opacity 1.2s ease,visibility 1.2s ease}
+#entry.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.entry-label{font-size:.65rem;letter-spacing:.35em;text-transform:uppercase;color:var(--neutral);margin-bottom:2.5rem;opacity:0;animation:fadeUp .9s ease .4s forwards}
+.entry-logo{width:min(220px,60vw);opacity:0;animation:fadeIn 1.2s ease .7s forwards;margin-bottom:2.5rem}
+.entry-title{font-family:var(--serif);font-size:clamp(1.4rem,4vw,2.4rem);font-weight:300;font-style:italic;color:var(--primary);letter-spacing:.02em;text-align:center;opacity:0;animation:fadeUp 1s ease 1s forwards;margin-bottom:.8rem}
+.entry-sub{font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--secondary);opacity:0;animation:fadeUp .9s ease 1.3s forwards;margin-bottom:3.5rem;text-align:center}
+.entry-line{width:1px;height:60px;background:linear-gradient(to bottom,transparent,var(--accent1));margin:0 auto 2rem;opacity:0;animation:fadeIn 1s ease 1.9s forwards}
+.entry-btn{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--primary);border:1px solid var(--accent1);background:none;cursor:none;padding:.9rem 2.4rem;opacity:0;animation:fadeUp .9s ease 1.6s forwards;transition:background .3s,color .3s}
+.entry-btn:hover{background:var(--primary);color:var(--bg)}
+@media(hover:none){.entry-btn{cursor:pointer}}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:1.4rem 2.4rem;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(236,230,217,.95) 70%,transparent)}
+.nav-logo img{height:30px;opacity:.9}
+.nav-links{display:flex;gap:2.2rem;list-style:none}
+.nav-links a{font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--secondary);text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--primary)}
+.nav-right{display:flex;align-items:center;gap:1.5rem}
+.nav-cart,.nav-wishlist{font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--secondary);cursor:none;background:none;border:none;position:relative;transition:color .3s}
+.nav-cart:hover,.nav-wishlist:hover{color:var(--primary)}
+@media(hover:none){.nav-cart,.nav-wishlist{cursor:pointer}}
+.cart-count,.wishlist-count{position:absolute;top:-6px;right:-12px;background:var(--accent2);color:var(--bg);font-size:.45rem;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+/* Hamburger */
+.hamburger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px}
+.hamburger span{display:block;width:22px;height:1px;background:var(--primary);transition:transform .3s,opacity .3s}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:60px;left:0;right:0;background:var(--bg);border-bottom:1px solid var(--surface2);padding:1.5rem 2.4rem;z-index:499;flex-direction:column;gap:1.2rem}
+.mobile-menu a{font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;color:var(--secondary);text-decoration:none}
+.mobile-menu.open{display:flex}
+@media(max-width:900px){
+  .nav-links{display:none}
+  .hamburger{display:flex}
+}
+
+/* CRAFT SPLIT */
+#craft{display:grid;grid-template-columns:1fr 1fr;min-height:100vh}
+.craft-left{position:relative;overflow:hidden}
+.craft-left-img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.85)}
+.craft-left-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(73,31,17,.72) 0%,rgba(73,31,17,.1) 60%)}
+.craft-left-text{position:absolute;bottom:0;left:0;right:0;padding:3rem}
+.craft-label{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--accent1);margin-bottom:1rem}
+.craft-title{font-family:var(--serif);font-size:clamp(2rem,4vw,3.6rem);font-weight:300;line-height:1.1;color:var(--bg)}
+.craft-title em{font-style:italic;color:var(--surface2)}
+.craft-right{display:flex;flex-direction:column;justify-content:center;padding:5rem 4rem}
+.craft-body{font-size:.85rem;line-height:1.9;color:var(--secondary);max-width:360px;margin-bottom:1.4rem}
+.craft-note{font-family:var(--serif);font-size:1.1rem;font-style:italic;color:var(--accent1)}
+.craft-credit{font-size:.58rem;letter-spacing:.15em;color:var(--neutral);margin-top:2rem;opacity:.7}
+@media(max-width:900px){
+  #craft{grid-template-columns:1fr}
+  .craft-left{min-height:60vw}
+  .craft-right{padding:3rem 1.5rem}
+}
+
+/* PROCESS STRIP */
+.process-strip{padding:1.6rem 0;overflow:hidden;border-top:1px solid var(--surface2);border-bottom:1px solid var(--surface2);background:var(--surface1)}
+.strip-inner{display:flex;gap:4rem;animation:scrollX 18s linear infinite;white-space:nowrap;align-items:center}
+.strip-item{font-family:var(--serif);font-size:1rem;font-style:italic;color:var(--secondary);flex-shrink:0}
+.strip-dot{width:4px;height:4px;background:var(--accent1);border-radius:50%;display:inline-block;flex-shrink:0}
+
+/* ROOMS NAV */
+.rooms-nav{padding:4rem 2.4rem 1.5rem;display:flex;gap:2.5rem;border-bottom:1px solid var(--surface2);flex-wrap:wrap}
+.room-tab{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--neutral);cursor:none;background:none;border:none;padding-bottom:.5rem;border-bottom:1px solid transparent;transition:color .3s,border-color .3s}
+.room-tab.active,.room-tab:hover{color:var(--primary);border-color:var(--accent1)}
+@media(hover:none){.room-tab{cursor:pointer}}
+
+/* GALLERY + STITCH HOVER */
+#gallery{padding:2.5rem 2.4rem 6rem;min-height:70vh}
+.gallery-header{margin-bottom:2.5rem}
+.gallery-room-title{font-family:var(--serif);font-size:clamp(1.6rem,4vw,2.6rem);font-weight:300;font-style:italic;color:var(--primary);margin-bottom:.3rem}
+.gallery-room-sub{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--neutral)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1.5rem;align-items:start}
+.piece{cursor:none;position:relative;transition:transform .6s cubic-bezier(0.23,1,0.32,1);perspective:1200px}
+.piece:hover{transform:scale(1.02)}
+.piece-1{grid-column:span 5}
+.piece-2{grid-column:span 7}
+.piece-3{grid-column:span 4}
+.piece-4{grid-column:span 4}
+.piece-5{grid-column:span 4}
+.piece-6{grid-column:span 6}
+.piece-7{grid-column:span 6}
+.piece-img-wrap{overflow:hidden;background:var(--surface1);position:relative}
+.piece-1 .piece-img-wrap{aspect-ratio:3/4}
+.piece-2 .piece-img-wrap{aspect-ratio:16/10}
+.piece-3 .piece-img-wrap,.piece-4 .piece-img-wrap,.piece-5 .piece-img-wrap{aspect-ratio:3/4}
+.piece-6 .piece-img-wrap,.piece-7 .piece-img-wrap{aspect-ratio:4/3}
+.piece-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.25,.46,.45,.94);filter:saturate(.88)}
+.piece:hover .piece-img{transform:scale(1.05)}
+.piece-img-wrap::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 6px,rgba(255,255,255,0.18) 6px,rgba(255,255,255,0.18) 10px);opacity:0;transition:opacity .4s;pointer-events:none}
+.piece:hover .piece-img-wrap::after{opacity:1;animation:stitchMove 1.8s linear infinite}
+.piece-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(73,31,17,.78) 0%,transparent 55%);opacity:0;transition:opacity .5s ease;display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem}
+.piece:hover .piece-overlay{opacity:1}
+.overlay-cat{font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--surface2);margin-bottom:.3rem}
+.overlay-title{font-family:var(--serif);font-size:1.2rem;font-style:italic;color:var(--bg)}
+.overlay-act{font-size:.52rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent1);margin-top:.4rem}
+.piece-info{padding:.9rem .1rem .2rem;position:relative}
+.piece-name{font-family:var(--serif);font-size:1rem;color:var(--primary);margin-bottom:.2rem}
+.piece-price{font-size:.63rem;letter-spacing:.08em;color:var(--secondary)}
+.wishlist-btn{position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.4rem;cursor:none;opacity:0.6;transition:all .3s}
+.wishlist-btn.active{color:#c0392b;opacity:1}
+.piece:hover .wishlist-btn{opacity:1}
+.piece-category-tag{display:inline-block;font-size:.5rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent2);border:1px solid var(--surface2);padding:.2rem .6rem;margin-bottom:.5rem}
+@media(hover:none){.piece,.wishlist-btn{cursor:pointer}}
+
+/* RESPONSIVE GRID */
+@media(max-width:900px){
+  .grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .piece-1,.piece-2,.piece-3,.piece-4,.piece-5,.piece-6,.piece-7{grid-column:span 1}
+  .piece-2 .piece-img-wrap{aspect-ratio:4/3}
+}
+@media(max-width:480px){
+  .grid{grid-template-columns:1fr}
+  .rooms-nav{padding:2rem 1.2rem 1rem;gap:1.2rem}
+  #gallery{padding:1.5rem 1.2rem 4rem}
+}
+
+/* MODAL — Glassmorphism */
+#modal{position:fixed;inset:0;background:var(--bg);z-index:800;opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+#modal.open{opacity:1;visibility:visible}
+.modal-img-side{position:relative;overflow:hidden;background:var(--surface1)}
+.modal-img-side img{width:100%;height:100%;object-fit:cover;display:block}
+.modal-info-side{padding:5rem 3.5rem;display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
+.modal-close{position:absolute;top:1.2rem;right:1.2rem;background:rgba(236,230,217,.85);border:none;cursor:none;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--secondary);z-index:10;padding:.4rem .8rem;transition:color .3s}
+.modal-close:hover{color:var(--primary)}
+.modal-cat{font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;color:var(--accent2);margin-bottom:1rem}
+.modal-title{font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;font-style:italic;line-height:1.15;margin-bottom:1rem}
+.modal-edition{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--neutral);margin-bottom:1.8rem}
+.modal-desc{font-size:.83rem;line-height:1.95;color:var(--secondary);max-width:380px;margin-bottom:2rem}
+.modal-price{font-family:var(--serif);font-size:1.5rem;color:var(--primary);margin-bottom:.3rem}
+.modal-price-sub{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--neutral);margin-bottom:2rem}
+.acquire-btn,.wishlist-modal-btn{display:inline-block;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--primary);border:1px solid var(--accent1);padding:.9rem 2rem;cursor:none;background:none;transition:background .3s,color .3s;margin-right:.8rem;margin-bottom:.8rem}
+.acquire-btn:hover,.wishlist-modal-btn:hover{background:var(--primary);color:var(--bg)}
+.view-btn{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--secondary);cursor:none;background:none;border:none;text-decoration:underline;text-underline-offset:4px;padding:.9rem 0}
+@media(hover:none){.acquire-btn,.view-btn,.wishlist-modal-btn{cursor:pointer}}
+.modal-details{margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid var(--surface2)}
+.modal-detail-row{display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--surface1);font-size:.7rem;color:var(--secondary)}
+.modal-detail-row span:first-child{color:var(--neutral);letter-spacing:.1em;text-transform:uppercase;font-size:.58rem}
+@media(max-width:900px){
+  #modal{grid-template-columns:1fr;grid-template-rows:45vh 1fr}
+  .modal-info-side{padding:2.5rem 1.5rem 4rem}
+}
+
+/* CUSTOM MODAL */
+#custom-modal{position:fixed;inset:0;background:rgba(236,230,217,0.98);z-index:810;opacity:0;visibility:hidden;display:flex;align-items:center;justify-content:center;padding:2rem}
+#custom-modal.open{opacity:1;visibility:visible}
+.custom-content{max-width:620px;width:100%;background:var(--bg);padding:3rem;border:1px solid var(--surface2);box-shadow:0 20px 60px rgba(73,31,17,.15)}
+.custom-close{position:absolute;top:2rem;right:2rem;background:none;border:none;font-size:1.5rem;color:var(--secondary);cursor:none}
+#customPreview img{max-width:100%;max-height:280px;border:1px solid var(--surface2);margin:1rem 0}
+
+/* JOURNAL */
+#journal{padding:6rem 2.4rem;background:var(--surface1)}
+.journal-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;flex-wrap:wrap;gap:1rem}
+.journal-title{font-family:var(--serif);font-size:clamp(1.8rem,4vw,2.8rem);font-weight:300;font-style:italic}
+.journal-desc{font-size:.75rem;line-height:1.8;color:var(--secondary);max-width:280px;text-align:right}
+.journal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.journal-card{cursor:none;background:var(--bg);overflow:hidden;transition:transform .4s}
+.journal-card:hover{transform:translateY(-4px)}
+@media(hover:none){.journal-card{cursor:pointer}}
+.journal-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;filter:saturate(.82)}
+.journal-body{padding:1.3rem}
+.journal-date{font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--neutral);margin-bottom:.5rem}
+.journal-entry-title{font-family:var(--serif);font-size:1.05rem;font-style:italic;color:var(--primary);margin-bottom:.4rem}
+.journal-excerpt{font-size:.73rem;line-height:1.75;color:var(--secondary)}
+@media(max-width:900px){.journal-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.journal-grid{grid-template-columns:1fr};#journal{padding:4rem 1.2rem}}
+
+/* ABOUT */
+#about{padding:8rem 2.4rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+.about-label{font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--accent2);margin-bottom:1.2rem}
+.about-h2{font-family:var(--serif);font-size:clamp(2rem,3.5vw,3rem);font-weight:300;line-height:1.2;margin-bottom:1.6rem}
+.about-h2 em{font-style:italic;color:var(--accent2)}
+.about-body{font-size:.83rem;line-height:2;color:var(--secondary);margin-bottom:1rem}
+.about-sig{font-family:var(--serif);font-size:1.2rem;font-style:italic;color:var(--accent1);margin-top:1rem}
+.about-right{position:relative}
+.about-img-main{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;filter:saturate(.85)}
+.about-img-float{position:absolute;width:45%;bottom:-2rem;left:-2rem;aspect-ratio:1;object-fit:cover;display:block;filter:saturate(.82);border:4px solid var(--bg)}
+@media(max-width:900px){
+  #about{grid-template-columns:1fr;gap:3rem;padding:5rem 1.5rem}
+  .about-img-float{width:38%;bottom:-1rem;left:-1rem}
+}
+@media(max-width:480px){#about{padding:4rem 1.2rem}}
+
+/* MARQUEE */
+.marquee-divider{padding:1.2rem 0;border-top:1px solid var(--surface2);border-bottom:1px solid var(--surface2);overflow:hidden}
+.marquee-inner{display:flex;gap:3rem;animation:scrollX 22s linear infinite;white-space:nowrap;align-items:center}
+.marquee-text{font-family:var(--serif);font-size:.85rem;font-style:italic;color:var(--neutral);flex-shrink:0}
+
+/* FOOTER */
+footer{padding:4rem 2.4rem;background:var(--primary);color:var(--surface1)}
+.footer-inner{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.footer-logo img{height:32px;filter:brightness(0) invert(.6) sepia(.3) saturate(.6);margin-bottom:1.2rem}
+.footer-tagline{font-family:var(--serif);font-size:.9rem;font-style:italic;color:var(--accent1);line-height:1.7}
+.footer-col-title{font-size:.55rem;letter-spacing:.35em;text-transform:uppercase;color:var(--neutral);margin-bottom:1.1rem}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.footer-links a{font-size:.73rem;color:var(--surface2);text-decoration:none;transition:color .3s}
+.footer-links a:hover{color:var(--surface1)}
+.footer-bottom{border-top:1px solid #6b4a3a;padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.8rem}
+.footer-copy{font-size:.58rem;letter-spacing:.13em;color:var(--neutral)}
+@media(max-width:900px){.footer-inner{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.footer-inner{grid-template-columns:1fr};footer{padding:3rem 1.2rem}}
+
+/* CART */
+#cart{position:fixed;right:0;top:0;bottom:0;width:min(380px,100vw);background:var(--bg);z-index:600;transform:translateX(100%);transition:transform .5s cubic-bezier(.25,.46,.45,.94);padding:5rem 1.8rem 2rem;border-left:1px solid var(--surface2);display:flex;flex-direction:column}
+#cart.open{transform:translateX(0)}
+.cart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.8rem;padding-bottom:1rem;border-bottom:1px solid var(--surface2)}
+.cart-title{font-family:var(--serif);font-size:1.3rem;font-style:italic}
+.cart-close{background:none;border:none;cursor:none;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--secondary)}
+@media(hover:none){.cart-close{cursor:pointer}}
+.cart-items{flex:1;overflow-y:auto}
+.cart-item{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--surface1)}
+.cart-item-img{width:56px;height:68px;object-fit:cover;flex-shrink:0;filter:saturate(.85);display:block}
+.cart-item-info{flex:1}
+.cart-item-name{font-family:var(--serif);font-size:.9rem;font-style:italic;margin-bottom:.25rem}
+.cart-item-price{font-size:.68rem;color:var(--secondary)}
+.cart-item-remove{background:none;border:none;cursor:none;font-size:.55rem;color:var(--neutral);margin-top:.35rem;letter-spacing:.1em;text-transform:uppercase}
+@media(hover:none){.cart-item-remove{cursor:pointer}}
+.cart-footer{padding-top:1.5rem;border-top:1px solid var(--surface2)}
+.coupon-section{display:flex;gap:8px;margin-bottom:1rem}
+.coupon-section input{flex:1;padding:.7rem;font-size:.75rem;border:1px solid var(--surface2)}
+.cart-total{display:flex;justify-content:space-between;margin-bottom:1.5rem}
+.cart-total-label{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--neutral)}
+.cart-total-val{font-family:var(--serif);font-size:1.05rem}
+.checkout-form input{width:100%;padding:.8rem;margin-bottom:1rem;border:1px solid var(--surface2);font-size:.8rem}
+.checkout-btn{width:100%;padding:.95rem;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;background:var(--primary);color:var(--bg);border:none;cursor:none;transition:background .3s}
+.checkout-btn:hover{background:var(--accent2)}
+@media(hover:none){.checkout-btn{cursor:pointer}}
+.cart-empty{text-align:center;padding:3rem 1rem;color:var(--neutral)}
+.cart-empty p{font-family:var(--serif);font-style:italic;font-size:.95rem}
+
+/* OVERLAY */
+#overlay-bg{position:fixed;inset:0;background:rgba(73,31,17,.38);z-index:550;opacity:0;visibility:hidden;transition:opacity .4s}
+#overlay-bg.show{opacity:1;visibility:visible}
+
+/* NOTIFICATION */
+.notif{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(60px);background:var(--primary);color:var(--bg);font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;padding:.75rem 1.8rem;z-index:700;opacity:0;transition:transform .4s,opacity .4s;white-space:nowrap;border-radius:4px}
+.notif.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scrollX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes stitchMove{to{background-position:30px 30px}}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+<div id="notif" class="notif" role="status" aria-live="polite">Added to your collection</div>
+
+<!-- ENTRY -->
+<div id="entry" role="dialog" aria-label="Exhibition entry screen">
+  <div class="entry-label">Exhibition 01 — Now Open</div>
+  <img src="https://res.cloudinary.com/dg4vourvl/image/upload/v1777148862/Asna_20260425_204824_0000_iah4pc.png" class="entry-logo" alt="ASNA Needle & Co. logo">
+  <div class="entry-title">Where thread becomes testament</div>
+  <div class="entry-sub">Handcrafted textile works &nbsp;·&nbsp; Studio edition</div>
+  <div class="entry-line" aria-hidden="true"></div>
+  <button class="entry-btn" onclick="enterSite()" aria-label="Enter the ASNA exhibition">Enter Exhibition</button>
+</div>
+
+<!-- NAV -->
+<nav role="navigation" aria-label="Main navigation">
+  <a class="nav-logo" href="#" aria-label="ASNA Needle & Co. home">
+    <img src="https://res.cloudinary.com/dg4vourvl/image/upload/v1777148862/Asna_20260425_204824_0000_iah4pc.png" alt="ASNA Needle & Co.">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#craft">The Craft</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#journal">Studio Journal</a></li>
+    <li><a href="#about">Studio</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-wishlist" onclick="toggleWishlistView()" aria-label="View wishlist">
+      Wishlist <span class="wishlist-count" id="wishlistCount">0</span>
+    </button>
+    <button class="nav-cart" onclick="toggleCart()" aria-label="Open collection cart">
+      Collection <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Toggle navigation menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+  <a href="#craft" onclick="closeMenu()">The Craft</a>
+  <a href="#gallery" onclick="closeMenu()">Gallery</a>
+  <a href="#journal" onclick="closeMenu()">Studio Journal</a>
+  <a href="#about" onclick="closeMenu()">Studio</a>
+</div>
+
+<!-- CRAFT SPLIT (unchanged) -->
+<div id="craft">
+  <div class="craft-left">
+    <img class="craft-left-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80&auto=format&fit=crop" alt="Close-up of hand embroidery stitching in progress on fabric" loading="lazy">
+    <div class="craft-left-overlay" aria-hidden="true"></div>
+    <div class="craft-left-text">
+      <div class="craft-label">The Making</div>
+      <div class="craft-title">Every stitch<br>is <em>intentional</em></div>
+    </div>
+  </div>
+  <div class="craft-right reveal">
+    <div class="craft-label">ASNA Needle & Co. — Studio Practice</div>
+    <p class="craft-body">Before we speak of pieces, we speak of process. Each work begins not with a design brief but with a material conversation — thread against fabric, needle through weave, pressure, patience, repetition.</p>
+    <p class="craft-body">We do not manufacture. We make.</p>
+    <div class="craft-note">"Craft is the slowest form of love."</div>
+    <div class="craft-credit">Threaded works inspired by contemporary embroidery artists reimagining football culture.</div>
+  </div>
+</div>
+
+<!-- PROCESS STRIP (unchanged) -->
+<div class="process-strip" aria-hidden="true">
+  <div class="strip-inner">
+    <span class="strip-item">Hand Embroidery</span><span class="strip-dot"></span>
+    <span class="strip-item">Crochet Structures</span><span class="strip-dot"></span>
+    <span class="strip-item">Surface Calligraphy</span><span class="strip-dot"></span>
+    <span class="strip-item">Textile Painting</span><span class="strip-dot"></span>
+    <span class="strip-item">Studio Edition</span><span class="strip-dot"></span>
+    <span class="strip-item">Limited Works</span><span class="strip-dot"></span>
+    <span class="strip-item">Hand Embroidery</span><span class="strip-dot"></span>
+    <span class="strip-item">Crochet Structures</span><span class="strip-dot"></span>
+    <span class="strip-item">Surface Calligraphy</span><span class="strip-dot"></span>
+    <span class="strip-item">Textile Painting</span><span class="strip-dot"></span>
+    <span class="strip-item">Studio Edition</span><span class="strip-dot"></span>
+    <span class="strip-item">Limited Works</span><span class="strip-dot"></span>
+  </div>
+</div>
+
+<!-- ROOMS NAV -->
+<div class="rooms-nav" id="roomsNav" role="tablist" aria-label="Gallery rooms">
+  <button class="room-tab active" role="tab" aria-selected="true" onclick="setRoom('all',this)">All Works</button>
+  <button class="room-tab" role="tab" aria-selected="false" onclick="setRoom('threaded',this)">Threaded Works</button>
+  <button class="room-tab" role="tab" aria-selected="false" onclick="setRoom('soft',this)">Soft Structures</button>
+  <button class="room-tab" role="tab" aria-selected="false" onclick="setRoom('surface',this)">Surface Studies</button>
+  <button class="room-tab" role="tab" aria-selected="false" onclick="setRoom('written',this)">Written Forms</button>
+  <button class="room-tab" role="tab" aria-selected="false" onclick="openCustomModal()">Custom Works</button>
+</div>
+
+<!-- GALLERY -->
+<section id="gallery" aria-label="Exhibition gallery">
+  <div class="gallery-header reveal">
+    <div class="gallery-room-title" id="roomTitle">All Works</div>
+    <div class="gallery-room-sub" id="roomSub">Exhibition 01 — Ongoing Collection</div>
+  </div>
+  <div class="grid" id="grid" role="list"></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-divider" aria-hidden="true">
+  <div class="marquee-inner">
+    <span class="marquee-text">Studio Works</span><span class="strip-dot"></span>
+    <span class="marquee-text">Not for everyone — for the right one</span><span class="strip-dot"></span>
+    <span class="marquee-text">Handmade in India</span><span class="strip-dot"></span>
+    <span class="marquee-text">Limited Editions</span><span class="strip-dot"></span>
+    <span class="marquee-text">ASNA Needle & Co.</span><span class="strip-dot"></span>
+    <span class="marquee-text">Studio Works</span><span class="strip-dot"></span>
+    <span class="marquee-text">Not for everyone — for the right one</span><span class="strip-dot"></span>
+    <span class="marquee-text">Handmade in India</span><span class="strip-dot"></span>
+    <span class="marquee-text">Limited Editions</span><span class="strip-dot"></span>
+    <span class="marquee-text">ASNA Needle & Co.</span><span class="strip-dot"></span>
+  </div>
+</div>
+
+<!-- JOURNAL -->
+<section id="journal" aria-label="Studio Journal">
+  <div class="journal-header reveal">
+    <div>
+      <div style="font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--accent2);margin-bottom:.7rem">Studio Journal</div>
+      <div class="journal-title">From the making room</div>
+    </div>
+    <div class="journal-desc">A creative archive of process, experiments, and unfinished thoughts. Not a shop — a studio.</div>
+  </div>
+  <div class="journal-grid" id="journalGrid"></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" aria-label="About the studio">
+  <div class="about-left reveal">
+    <div class="about-label">The Studio</div>
+    <h2 class="about-h2">A practice built on<br><em>slow making</em></h2>
+    <p class="about-body">ASNA Needle & Co. is a one-woman design studio rooted in the belief that handcraft is the most honest form of expression. Every piece made here is stitched by hand, considered over time, and released only when it is ready.</p>
+    <p class="about-body">We work at the intersection of football culture and textile art — not as a commercial venture, but as a personal investigation into what sport means when translated through thread, crochet, and paint.</p>
+    <div class="about-sig">— Asna, Studio Founder</div>
+  </div>
+  <div class="about-right reveal">
+    <img class="about-img-main" src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=700&q=80&auto=format&fit=crop" alt="Textile artist working at a studio desk in natural light" loading="lazy">
+    <img class="about-img-float" src="https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=80&auto=format&fit=crop" alt="Close-up of hands doing embroidery stitching on fabric" loading="lazy">
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">
+        <img src="https://res.cloudinary.com/dg4vourvl/image/upload/v1777148862/Asna_20260425_204824_0000_iah4pc.png" alt="ASNA Needle & Co.">
+      </div>
+      <div class="footer-tagline">Handmade textile works.<br>Studio practice. Limited editions.</div>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigate</div>
+      <ul class="footer-links">
+        <li><a href="#craft">The Craft</a></li>
+        <li><a href="#gallery">Exhibition Gallery</a></li>
+        <li><a href="#journal">Studio Journal</a></li>
+        <li><a href="#about">About the Studio</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <ul class="footer-links">
+        <li><a href="mailto:studio@asnaneedle.com">studio@asnaneedle.com</a></li>
+        <li><a href="#">Commission Inquiries</a></li>
+        <li><a href="#">Care & Handling</a></li>
+        <li><a href="#">Stockist Enquiries</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 ASNA Needle & Co. — All works handmade in India</div>
+    <div class="footer-copy">Not mass produced. Not replicated. Not rushed.</div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div id="modal" role="dialog" aria-modal="true" aria-label="Piece detail view">
+  <div class="modal-img-side" id="modalImgSide"></div>
+  <div class="modal-info-side" id="modalInfo"></div>
+</div>
+
+<!-- CUSTOM WORKS MODAL -->
+<div id="custom-modal" role="dialog" aria-modal="true" aria-label="Custom commission request">
+  <div class="custom-content" style="position:relative">
+    <button class="custom-close" onclick="closeCustomModal()">✕</button>
+    <h2 style="font-family:var(--serif);font-size:2rem;font-style:italic;margin-bottom:1.5rem">Commission a Custom Work</h2>
+    <p style="color:var(--secondary);margin-bottom:1.5rem">Tell us your vision — football memory, specific motif, colors, size. We’ll respond personally.</p>
+    
+    <textarea id="customDesc" rows="5" placeholder="Describe your idea (e.g., a particular player moment, crest reinterpretation, color palette...)" style="width:100%;padding:1rem;margin-bottom:1rem;border:1px solid var(--surface2);font-size:.9rem"></textarea>
+    
+    <label style="display:block;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;color:var(--neutral)">Reference Image (optional)</label>
+    <input type="file" id="customFile" accept="image/*" style="margin-bottom:1rem">
+    <div id="customPreview" style="margin-bottom:1.5rem"></div>
+    
+    <div style="display:flex;gap:1rem">
+      <button onclick="submitCustomOrder()" class="acquire-btn" style="flex:1">Send Inquiry to Studio</button>
+      <button onclick="closeCustomModal()" class="view-btn" style="flex:1">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY + CART -->
+<div id="overlay-bg" onclick="closeAll()" aria-hidden="true"></div>
+<div id="cart" role="complementary" aria-label="Your collection cart">
+  <div class="cart-header">
+    <div class="cart-title">Your Collection</div>
+    <button class="cart-close" onclick="toggleCart()" aria-label="Close cart">Close ✕</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer" id="cartFooter"></div>
+</div>
+
+<script>
+// PIECES DATA — upgraded with real studio images and artistic names
+const pieces = [
+  {id:1, name:'Winger Thread I', cat:'threaded', catLabel:'Threaded Works', edition:'Edition of 3', price:'₹3,200', priceSub:'Acquisition — Studio Piece',
+   desc:'Freehand satin and split stitch capturing the blur of a winger in full flight. DMC silk on hand-dyed linen. 12 hours of meditative stitching.', dims:'28 × 38 cm', material:'Organic linen, silk thread', time:'12 hours',
+   class:'piece-1', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229444/IMG_20260427_001524_272_q3ym2h.jpg', fallback:'linear-gradient(150deg,#c4a882,#a07d60,#d4b898)'},
+  
+  {id:2, name:'Pitch Geometry at Dusk', cat:'threaded', catLabel:'Threaded Works', edition:'Unique Work', price:'₹5,800', priceSub:'Acquisition — Original Piece',
+   desc:'Layered French knots and long-short stitch forming the lines of a fading pitch. Wool and silk threads on canvas.', dims:'52 × 32 cm', material:'Cotton canvas, wool & silk thread', time:'19 hours',
+   class:'piece-2', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229438/IMG_20260427_001524_648_gunbxq.jpg', fallback:'linear-gradient(120deg,#8b7363,#b38c74,#ece6d9)'},
+  
+  {id:3, name:'Keeper Stillness', cat:'threaded', catLabel:'Threaded Works', edition:'Edition of 5', price:'₹2,499', priceSub:'Studio Piece',
+   desc:'Portrait of quiet vigilance. Soft filling stitches in ochre tones referencing vintage match photography.', dims:'22 × 30 cm', material:'Hand-dyed linen, cotton thread', time:'8 hours',
+   class:'piece-3', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229444/IMG_20260427_001524_622_vxjcmx.jpg', fallback:'linear-gradient(135deg,#caa892,#946a53,#e4cdb9)'},
+  
+  {id:4, name:'Lattice Tension', cat:'soft', catLabel:'Soft Structures', edition:'Edition of 4', price:'₹1,899', priceSub:'Studio Piece',
+   desc:'Crochet panel in undyed merino wool. Geometric lattice built stitch by stitch without a written pattern.', dims:'30 × 30 cm', material:'Undyed merino wool', time:'6 hours',
+   class:'piece-4', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229437/IMG_20260427_001524_145_wtlaxj.jpg', fallback:'linear-gradient(135deg,#e4cdb9,#b38c74,#ece6d9)'},
+  
+  {id:5, name:'Open Seam Study II', cat:'soft', catLabel:'Soft Structures', edition:'Unique Work', price:'₹2,200', priceSub:'Acquisition',
+   desc:'Experimental crochet exploring negative space and structural voids in cotton cord.', dims:'25 × 35 cm', material:'Cotton cord, linen yarn', time:'7 hours',
+   class:'piece-5', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229436/IMG_20260427_001530_122_nw9qfx.jpg', fallback:'linear-gradient(160deg,#946a53,#caa892,#8b7363)'},
+  
+  {id:6, name:'Field Wash — Ochre', cat:'surface', catLabel:'Surface Studies', edition:'Unique Work', price:'₹4,100', priceSub:'Acquisition — Original',
+   desc:'Textile painting with natural earth pigments applied in repeated cloth passes. Late-afternoon grassland captured in fabric.', dims:'40 × 50 cm', material:'Raw cotton, mineral pigments', time:'4 sessions',
+   class:'piece-6', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229394/IMG_20260427_001751_610_yhhw9q.jpg', fallback:'linear-gradient(135deg,#b38c74,#491f11,#caa892)'},
+  
+  {id:7, name:'Alif in Rust', cat:'written', catLabel:'Written Forms', edition:'Edition of 6', price:'₹1,650', priceSub:'Studio Piece',
+   desc:'Nastaliq script rendered with reed pen and iron gall/rust pigment translated onto linen.', dims:'18 × 26 cm', material:'Linen, iron gall ink, reed pen', time:'3 hours',
+   class:'piece-7', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229418/IMG_20260427_001624_818_g8fy4o.jpg', fallback:'linear-gradient(135deg,#8b7363,#491f11,#726054)'},
+  
+  // Additional balanced pieces using remaining images (you can expand with more from the list)
+  {id:8, name:'Dual Stripe Echo', cat:'threaded', catLabel:'Threaded Works', edition:'Edition of 4', price:'₹2,950', priceSub:'Studio Piece',
+   desc:'Vertical stripe study inspired by pitch markings. Dense satin stitch on raw linen.', dims:'35 × 45 cm', material:'Raw linen, silk thread', time:'14 hours',
+   class:'piece-1', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229435/IMG_20260427_001529_930_sqdxzl.jpg', fallback:'linear-gradient(150deg,#c4a882,#a07d60,#d4b898)'},
+  
+  {id:9, name:'Crest Fragment', cat:'threaded', catLabel:'Threaded Works', edition:'Unique Work', price:'₹4,800', priceSub:'Acquisition — Original',
+   desc:'Deconstructed crest motif in layered thread work.', dims:'40 × 40 cm', material:'Linen, mixed threads', time:'16 hours',
+   class:'piece-3', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229428/IMG_20260427_001558_799_skgxei.jpg', fallback:'linear-gradient(135deg,#caa892,#946a53,#e4cdb9)'},
+  
+  {id:10, name:'Nocturne Thread', cat:'soft', catLabel:'Soft Structures', edition:'Edition of 3', price:'₹2,100', priceSub:'Studio Piece',
+   desc:'Dark-toned crochet exploring depth and shadow.', dims:'28 × 38 cm', material:'Merino wool', time:'9 hours',
+   class:'piece-4', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229420/IMG_20260427_001558_455_tqdfdy.jpg', fallback:'linear-gradient(160deg,#946a53,#caa892,#8b7363)'},
+  
+  {id:11, name:'Surface Memory', cat:'surface', catLabel:'Surface Studies', edition:'Unique Work', price:'₹3,700', priceSub:'Acquisition — Original',
+   desc:'Pigment wash evoking memory of floodlit pitch.', dims:'45 × 55 cm', material:'Cotton, natural pigments', time:'5 sessions',
+   class:'piece-6', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229393/IMG_20260427_001751_854_ga3utd.jpg', fallback:'linear-gradient(135deg,#b38c74,#491f11,#caa892)'},
+  
+  {id:12, name:'Written Form II', cat:'written', catLabel:'Written Forms', edition:'Edition of 5', price:'₹1,450', priceSub:'Studio Piece',
+   desc:'Calligraphic exploration in rust and sepia tones.', dims:'20 × 30 cm', material:'Handmade paper transferred to linen', time:'4 hours',
+   class:'piece-7', img:'https://res.cloudinary.com/dg4vourvl/image/upload/v1777229418/IMG_20260427_001624_776_hnhmhu.jpg', fallback:'linear-gradient(135deg,#8b7363,#491f11,#726054)'}
+  // You can keep adding more from the provided 22 images as needed
+];
+
+const journals = [ /* unchanged */ {
+    date:'March 2026', title:'On beginning without a plan',
+    excerpt:'The best embroidery I have ever made started with a knot and no idea. This is a note about that morning, and what happened after.',
+    img:'https://images.unsplash.com/photo-1551232864-3f0890e1776b?w=600&q=80&auto=format&fit=crop'
+  },
+  {
+    date:'February 2026', title:'Thread tension & patience',
+    excerpt:'I spent three weeks working on one square centimetre. Not because it was difficult — because I was not ready to move on.',
+    img:'https://images.unsplash.com/photo-1606722590583-6951b5ea92ad?w=600&q=80&auto=format&fit=crop'
+  },
+  {
+    date:'January 2026', title:'Calligraphy as warm-up',
+    excerpt:'Every studio day begins with writing. Not words — letters. The act of forming a single perfect character prepares the hand for embroidery.',
+    img:'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&q=80&auto=format&fit=crop'
+  }
+];
+
+let cart = JSON.parse(localStorage.getItem('asnaCart')) || [];
+let wishlist = JSON.parse(localStorage.getItem('asnaWishlist')) || [];
+let currentRoom = 'all';
+let discount = 0;
+
+// CURSOR + THREAD TRAIL
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let trailElements = [];
+const isTouchDevice = () => window.matchMedia('(hover: none)').matches;
+
+document.addEventListener('mousemove', e => {
+  if(isTouchDevice()) return;
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+  ring.style.left = e.clientX + 'px';
+  ring.style.top = e.clientY + 'px';
+
+  // Thread trail
+  const trail = document.createElement('div');
+  trail.className = 'thread-trail';
+  trail.style.left = e.clientX + 'px';
+  trail.style.top = e.clientY + 'px';
+  document.body.appendChild(trail);
+  trailElements.push(trail);
+  if(trailElements.length > 18) {
+    const old = trailElements.shift();
+    old.remove();
+  }
+  setTimeout(() => { if(trail.parentNode) trail.remove(); }, 600);
+});
+
+document.addEventListener('mouseover', e => {
+  if(isTouchDevice()) return;
+  const h = e.target.closest('button,a,.piece,.journal-card,.room-tab');
+  cur.classList.toggle('hover', !!h);
+  ring.classList.toggle('hover', !!h);
+});
+
+// ENTRY
+function enterSite() {
+  document.getElementById('entry').classList.add('hidden');
+}
+
+// MOBILE MENU
+function toggleMenu() {
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  const isOpen = menu.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  btn.setAttribute('aria-expanded', isOpen);
+}
+function closeMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamburger').setAttribute('aria-expanded','false');
+}
+
+// ROOMS
+const roomTitles = {all:'All Works',threaded:'Threaded Works',soft:'Soft Structures',surface:'Surface Studies',written:'Written Forms'};
+const roomSubs = {all:'Exhibition 01 — Ongoing Collection',threaded:'Hand embroidery — football-inspired works',soft:'Crochet — structural textile explorations',surface:'Painting-based textile & visual works',written:'Calligraphy works on textile & paper'};
+
+function setRoom(room, btn) {
+  currentRoom = room;
+  document.querySelectorAll('.room-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+  btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+  document.getElementById('roomTitle').textContent = roomTitles[room] || room;
+  document.getElementById('roomSub').textContent = roomSubs[room] || 'Studio Commissions';
+  renderGallery();
+}
+
+// GALLERY RENDER (with wishlist heart)
+function renderGallery() {
+  const grid = document.getElementById('grid');
+  const filtered = currentRoom === 'all' ? pieces : pieces.filter(p => p.cat === currentRoom);
+  grid.innerHTML = filtered.map(p => `
+    <div class="piece \( {p.class}" onclick="openModal( \){p.id})" role="listitem" tabindex="0"
+      onkeydown="if(event.key==='Enter')openModal(${p.id})" aria-label="View ${p.name}">
+      <div class="piece-img-wrap" style="background:${p.fallback}">
+        <img src="\( {p.img}" class="piece-img" alt=" \){p.name}" loading="lazy" onerror="this.style.background='${p.fallback}'">
+        <div class="piece-overlay" aria-hidden="true">
+          <div class="overlay-cat">${p.catLabel}</div>
+          <div class="overlay-title">${p.name}</div>
+          <div class="overlay-act">View Piece →</div>
+        </div>
+      </div>
+      <div class="piece-info">
+        <div class="piece-category-tag">${p.catLabel}</div>
+        <div class="piece-name">${p.name}</div>
+        <div class="piece-price">${p.price} — ${p.edition}</div>
+        <button class="wishlist-btn \( {wishlist.includes(p.id) ? 'active' : ''}" onclick="event.stopImmediatePropagation(); toggleWishlist( \){p.id});">❤️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// MODAL
+function openModal(id) {
+  const p = pieces.find(x => x.id === id);
+  if(!p) return;
+
+  document.getElementById('modalImgSide').innerHTML = `
+    <button class="modal-close" onclick="closeModal()">✕ Close</button>
+    <img src="\( {p.img}" style="width:100%;height:100%;object-fit:cover" alt=" \){p.name}" loading="lazy">
+  `;
+
+  document.getElementById('modalInfo').innerHTML = `
+    <div class="modal-cat">${p.catLabel}</div>
+    <div class="modal-title">${p.name}</div>
+    <div class="modal-edition">${p.edition}</div>
+    <div class="modal-desc">${p.desc}</div>
+    <div class="modal-price">${p.price}</div>
+    <div class="modal-price-sub">${p.priceSub}</div>
+    <button class="acquire-btn" onclick="addToCart(${p.id});closeModal()">Acquire This Piece</button>
+    <button class="wishlist-modal-btn" onclick="toggleWishlist(${p.id});">❤️ ${wishlist.includes(p.id) ? 'Saved' : 'Add to Wishlist'}</button>
+    <button class="view-btn" onclick="closeModal()">Return to Gallery</button>
+    <div class="modal-details">
+      <div class="modal-detail-row"><span>Dimensions</span><span>${p.dims}</span></div>
+      <div class="modal-detail-row"><span>Material</span><span>${p.material}</span></div>
+      <div class="modal-detail-row"><span>Time Invested</span><span>${p.time}</span></div>
+      <div class="modal-detail-row"><span>Edition</span><span>${p.edition}</span></div>
+    </div>
+  `;
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('overlay-bg').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('overlay-bg').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// WISHLIST
+function toggleWishlist(id) {
+  if (wishlist.includes(id)) {
+    wishlist = wishlist.filter(w => w !== id);
+  } else {
+    wishlist.push(id);
+  }
+  localStorage.setItem('asnaWishlist', JSON.stringify(wishlist));
+  renderWishlistCount();
+  renderGallery(); // refresh hearts
+}
+
+function renderWishlistCount() {
+  document.getElementById('wishlistCount').textContent = wishlist.length;
+}
+
+function toggleWishlistView() {
+  alert('Wishlist view coming soon — currently ' + wishlist.length + ' saved pieces. Check hearts in gallery.');
+}
+
+// CART
+function addToCart(id) {
+  const p = pieces.find(x => x.id === id);
+  if(!p || cart.find(c => c.id === id)) return;
+  cart.push(p);
+  localStorage.setItem('asnaCart', JSON.stringify(cart));
+  renderCart();
+  showNotif('Added to Collection');
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(c => c.id !== id);
+  localStorage.setItem('asnaCart', JSON.stringify(cart));
+  renderCart();
+}
+
+function renderCart() {
+  document.getElementById('cartCount').textContent = cart.length;
+  const el = document.getElementById('cartItems');
+  const ft = document.getElementById('cartFooter');
+  
+  if(!cart.length) {
+    el.innerHTML = '<div class="cart-empty"><p>Your collection is empty</p><br><span style="font-size:.62rem">Explore the gallery or wishlist</span></div>';
+    ft.innerHTML = ''; 
+    return;
+  }
+
+  el.innerHTML = cart.map(p => `
+    <div class="cart-item">
+      <img class="cart-item-img" src="\( {p.img}" alt=" \){p.name}" loading="lazy">
+      <div class="cart-item-info">
+        <div class="cart-item-name">${p.name}</div>
+        <div class="cart-item-price">${p.price}</div>
+        <button class="cart-item-remove" onclick="removeFromCart(${p.id})">Remove</button>
+      </div>
+    </div>
+  `).join('');
+
+  let total = cart.reduce((s,p) => s + parseInt(p.price.replace(/[^0-9]/g,'')), 0);
+  if(discount > 0) total = Math.round(total * (1 - discount));
+
+  ft.innerHTML = `
+    <div class="coupon-section">
+      <input id="couponInput" placeholder="Gift / Coupon Code" style="padding:0.7rem">
+      <button onclick="applyCoupon()" style="padding:0.7rem 1rem;background:var(--accent1);color:var(--bg);border:none">Apply</button>
+    </div>
+    <div class="cart-total">
+      <span class="cart-total-label">Total${discount>0?' (15% off)':''}</span>
+      <span class="cart-total-val">₹${total.toLocaleString('en-IN')}</span>
+    </div>
+    <form class="checkout-form" onsubmit="event.preventDefault();submitOrder()">
+      <input type="text" id="buyerName" required placeholder="Full Name *">
+      <input type="tel" id="buyerPhone" required placeholder="Phone Number *">
+      <input type="email" id="buyerEmail" placeholder="Email (optional)">
+      <button type="submit" class="checkout-btn">Confirm Acquisition → Studio Contact</button>
+    </form>
+  `;
+}
+
+function applyCoupon() {
+  const code = (document.getElementById('couponInput') || {}).value?.trim().toUpperCase();
+  if (code === 'ASNA2026' || code === 'THREADLOVE' || code === 'STITCH') {
+    discount = 0.15;
+    showNotif('15% discount applied');
+    renderCart();
+  } else {
+    showNotif('Invalid code');
+  }
+}
+
+function submitOrder() {
+  const name = document.getElementById('buyerName').value.trim();
+  const phone = document.getElementById('buyerPhone').value.trim();
+  if (!name || !phone) {
+    alert('Name and phone number are required');
+    return;
+  }
+  showNotif('Inquiry received. The studio will contact you within 48 hours.');
+  cart = [];
+  localStorage.setItem('asnaCart', JSON.stringify(cart));
+  renderCart();
+  toggleCart();
+}
+
+// CUSTOM ORDER
+function openCustomModal() {
+  document.getElementById('custom-modal').classList.add('open');
+  document.getElementById('overlay-bg').classList.add('show');
+  document.body.style.overflow = 'hidden';
+  
+  // Image preview handler
+  const fileInput = document.getElementById('customFile');
+  fileInput.onchange = function(e) {
+    const previewDiv = document.getElementById('customPreview');
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        previewDiv.innerHTML = `<img src="${ev.target.result}" alt="Preview">`;
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+}
+
+function closeCustomModal() {
+  document.getElementById('custom-modal').classList.remove('open');
+  document.getElementById('overlay-bg').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function submitCustomOrder() {
+  const desc = document.getElementById('customDesc').value.trim();
+  if (!desc) {
+    alert('Please describe your commission idea');
+    return;
+  }
+  showNotif('Custom inquiry sent. Studio will reply soon.');
+  closeCustomModal();
+}
+
+// TOGGLE CART
+function toggleCart() {
+  const c = document.getElementById('cart');
+  const ob = document.getElementById('overlay-bg');
+  const open = c.classList.toggle('open');
+  ob.classList.toggle('show', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+  if(open) renderCart();
+}
+
+function closeAll() {
+  document.getElementById('cart').classList.remove('open');
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('custom-modal').classList.remove('open');
+  document.getElementById('overlay-bg').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// NOTIFICATION
+function showNotif(msg = 'Added to your collection') {
+  const n = document.getElementById('notif');
+  n.textContent = msg;
+  n.classList.add('show');
+  setTimeout(() => n.classList.remove('show'), 2800);
+}
+
+// JOURNAL (unchanged)
+function renderJournal() {
+  document.getElementById('journalGrid').innerHTML = journals.map(j => `
+    <article class="journal-card">
+      <img class="journal-img" src="\( {j.img}" alt=" \){j.title}" loading="lazy">
+      <div class="journal-body">
+        <div class="journal-date">${j.date}</div>
+        <div class="journal-entry-title">${j.title}</div>
+        <div class="journal-excerpt">${j.excerpt}</div>
+      </div>
+    </article>
+  `).join('');
+}
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// INIT
+renderGallery();
+renderJournal();
+renderCart();
+renderWishlistCount();
+</script>
+</body>
+</html>
